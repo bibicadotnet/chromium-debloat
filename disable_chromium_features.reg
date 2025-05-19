@@ -34,9 +34,9 @@ Windows Registry Editor Version 5.00
 ; Tắt Help improve security on the web for everyone
 "SafeBrowsingExtendedReportingEnabled"=dword:00000000
 
-; Cấu hình DNS bảo mật tự động với Cloudflare
+; Cấu hình DNS bảo mật tự động (tùy chỉnh theo DNS hệ thống)
 "DnsOverHttpsMode"="automatic"
-"DnsOverHttpsTemplates"="https://cloudflare-dns.com/dns-query{?dns}"
+;"DnsOverHttpsTemplates"="https://cloudflare-dns.com/dns-query{?dns}" (nếu muốn cố định trình duyệt dùng DNS Cloudflare)
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chromium\ExtensionInstallForcelist]
 "1"="edibdbjcniadpccecjdfdjjppcpchdlm"

@@ -9,7 +9,6 @@
     4. Applies the registry settings
 .NOTES
     Compatible with all PowerShell versions
-    Requires Administrator privileges
 #>
 
 # Set console encoding to UTF-8 for proper character display

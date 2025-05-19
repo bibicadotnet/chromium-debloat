@@ -5,6 +5,9 @@ Windows Registry Editor Version 5.00
 ; Tắt Make searches and browsing better
 "UrlKeyedAnonymizedDataCollectionEnabled"=dword:00000000
 
+; Bật Improve search suggestions
+"SearchSuggestEnabled"=dword:00000001
+
 ; Tắt "Autofill và liên quan đến mật khẩu"
 "AutofillAddressEnabled"=dword:00000000
 "AutofillCreditCardEnabled"=dword:00000000

@@ -38,6 +38,9 @@ Windows Registry Editor Version 5.00
 "DnsOverHttpsMode"="automatic"
 ;"DnsOverHttpsTemplates"="https://cloudflare-dns.com/dns-query{?dns}" (nếu muốn cố định trình duyệt dùng DNS Cloudflare)
 
+; Hiển thị đầy đủ URL trên thanh địa chỉ
+"ShowFullUrlsInAddressBar"=dword:00000001
+
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chromium\ExtensionInstallForcelist]
 "1"="edibdbjcniadpccecjdfdjjppcpchdlm"
 "2"="cjpalhdlnbpafiamejdnhcphjbkeiagm"

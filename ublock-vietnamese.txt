@@ -1,19 +1,19 @@
 {
-  "timeStamp": 1747713935446,
+  "timeStamp": 1747888546161,
   "version": "1.64.0",
   "userSettings": {
-    "advancedUserEnabled": true,
-    "importedLists": [],
-    "popupPanelSections": 31
+    "cloudStorageEnabled": true,
+    "externalLists": "https://raw.githubusercontent.com/DandelionSprout/adfilt/refs/heads/master/LegitimateURLShortener.txt",
+    "importedLists": [
+      "https://raw.githubusercontent.com/DandelionSprout/adfilt/refs/heads/master/LegitimateURLShortener.txt"
+    ]
   },
   "selectedFilterLists": [
     "user-filters",
-    "ublock-filters",
     "easylist",
     "easyprivacy",
-    "urlhaus-1",
-    "plowe-0",
-    "VIE-1"
+    "VIE-1",
+    "https://raw.githubusercontent.com/DandelionSprout/adfilt/refs/heads/master/LegitimateURLShortener.txt"
   ],
   "hiddenSettings": {},
   "whitelist": [

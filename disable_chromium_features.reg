@@ -34,13 +34,33 @@ Windows Registry Editor Version 5.00
 ; Tắt Help improve security on the web for everyone
 "SafeBrowsingExtendedReportingEnabled"=dword:00000000
 
-; Cấu hình DNS bảo mật tự động (tùy chỉnh theo DNS hệ thống)
+; Cấu hình DNS bảo mật tự động (tùy chỉnh DNS Cloudflare)
 "DnsOverHttpsMode"="automatic"
-;"DnsOverHttpsTemplates"="https://cloudflare-dns.com/dns-query{?dns}" (nếu muốn cố định trình duyệt dùng DNS Cloudflare)
+"DnsOverHttpsTemplates"="https://cloudflare-dns.com/dns-query{?dns}"
 
 ; Hiển thị đầy đủ URL trên thanh địa chỉ
 "ShowFullUrlsInAddressBar"=dword:00000001
 
-;[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chromium\ExtensionInstallForcelist]
-;"1"="edibdbjcniadpccecjdfdjjppcpchdlm"
-;"2"="cjpalhdlnbpafiamejdnhcphjbkeiagm"
+; Tắt định vị ở mọi trang (hiển thị khi truy cập trang)
+"DefaultGeolocationSetting"=dword:00000002
+
+; Tắt thông báo ở mọi trang (hiển thị khi truy cập trang)
+"DefaultNotificationsSetting"=dword:00000002
+
+; Bật Block third-party cookies
+"BlockThirdPartyCookies"=dword:00000001
+
+; Bật Safe Browsing No protection
+"SafeBrowsingProtectionLevel"=dword:00000000
+
+; Tắt Warn you if a password was compromised in a data breach
+"PasswordLeakDetectionEnabled"=dword:00000000
+
+; Bật Memory Saver
+"HighEfficiencyModeEnabled"=dword:00000001
+
+; Bật Memory Saver -> Maximum memory savings
+"MemorySaverModeSavings"=dword:00000002
+
+; Tắt Preload pages
+"NetworkPredictionOptions"=dword:00000002

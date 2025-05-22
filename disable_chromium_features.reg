@@ -50,8 +50,8 @@ Windows Registry Editor Version 5.00
 ; Bật Block third-party cookies
 "BlockThirdPartyCookies"=dword:00000001
 
-; Bật Safe Browsing No protection
-"SafeBrowsingProtectionLevel"=dword:00000000
+; Bật Safe Browsing Standard protection
+"SafeBrowsingProtectionLevel"=dword:00000001
 
 ; Tắt Warn you if a password was compromised in a data breach
 "PasswordLeakDetectionEnabled"=dword:00000000

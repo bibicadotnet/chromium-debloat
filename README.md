@@ -1,4 +1,4 @@
-# Chromium Hibbiki trên Woolyss
+# Chromium Hibbiki Woolyss
 
 Run PowerShell, copy the code below into
 

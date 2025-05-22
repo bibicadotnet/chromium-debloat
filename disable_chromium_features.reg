@@ -41,6 +41,6 @@ Windows Registry Editor Version 5.00
 ; Hiển thị đầy đủ URL trên thanh địa chỉ
 "ShowFullUrlsInAddressBar"=dword:00000001
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chromium\ExtensionInstallForcelist]
-"1"="edibdbjcniadpccecjdfdjjppcpchdlm"
-"2"="cjpalhdlnbpafiamejdnhcphjbkeiagm"
+;[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chromium\ExtensionInstallForcelist]
+;"1"="edibdbjcniadpccecjdfdjjppcpchdlm"
+;"2"="cjpalhdlnbpafiamejdnhcphjbkeiagm"

@@ -5,7 +5,7 @@
 :: ==============================================
 set "CHROMIUM_PATH=F:\_1_browser\Chromium\bin\chrome.exe"
 set "PROFILE_PATH=F:\_1_browser\Chromium\bibica"
-set "BROWSER_NAME=MyChromium"
+set "BROWSER_NAME=Chromium"
 set "BROWSER_DESC=Chromium with custom profile"
 
 :: ==============================================

@@ -4,7 +4,7 @@
 :: CONFIGURATION SECTION - EDIT THESE VALUES
 :: ==============================================
 set "CHROMIUM_PATH=C:\Program Files\Chromium\Application\chrome.exe"
-set "PROFILE_PATH=F:\Private\chrome_lamviec"
+set "PROFILE_PATH=F:\_1_browser\Chromium\bibica"
 set "BROWSER_NAME=Chromium"
 set "BROWSER_DESC=Chromium default browser with custom profile"
 
@@ -12,12 +12,11 @@ set "BROWSER_DESC=Chromium default browser with custom profile"
 :: SYSTEM CHECKS
 :: ==============================================
 :: Check if running as administrator
-net session >nul 2>&1
-if %ERRORLEVEL% neq 0 (
-    echo ERROR: This script requires administrator privileges.
-    echo Please right-click and select "Run as administrator".
-    pause
-    exit /b 1
+NET SESSION >nul 2>&1
+IF %ERRORLEVEL% NEQ 0 (
+    ECHO Requesting administrative privileges...
+    powershell -Command "Start-Process -FilePath '%~dpnx0' -Verb RunAs"
+    EXIT /B
 )
 
 :: Check if Chromium exists

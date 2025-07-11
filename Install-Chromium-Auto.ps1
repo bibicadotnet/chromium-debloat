@@ -5,8 +5,7 @@
     This script performs:
     1. Downloads the latest mini_installer.sync.exe from GitHub
     2. Installs Chromium silently
-    3. Downloads the registry tweak file
-    4. Applies the registry settings
+    3. Applies the registry settings
 .NOTES
     Compatible with all PowerShell versions
 #>
@@ -62,15 +61,13 @@ try {
 
         Start-Process "regedit.exe" -ArgumentList "/s `"$removeRegFilePath`"" -Wait -NoNewWindow
 
-        # Download registry tweak
+        # Optimizing Chromium policies
         $regFileUrl = "https://raw.githubusercontent.com/bibicadotnet/chromium-debloat/main/disable_chromium_features.reg"
         $regFilePath = "$downloadFolder\disable_chromium_features.reg"
         
-        Write-Host "Downloading configuration file..."
-        Invoke-WebRequest -Uri $regFileUrl -OutFile $regFilePath -UseBasicParsing
-        
-        # Apply registry settings
         Write-Host "Optimizing Chromium policies..."
+        Invoke-WebRequest -Uri $regFileUrl -OutFile $regFilePath -UseBasicParsing
+
         Start-Process "regedit.exe" -ArgumentList "/s `"$regFilePath`"" -Wait -NoNewWindow
         
         Write-Host "Chromium installation completed successfully!" -ForegroundColor Green

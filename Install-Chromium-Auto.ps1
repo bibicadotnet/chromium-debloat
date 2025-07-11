@@ -39,11 +39,12 @@ try {
     if ($asset) {
         $downloadUrl = $asset.browser_download_url
         $fileSizeMB = [math]::Round($asset.size/1MB, 2)
-        Write-Host "Downloading Chromium (Size: ${fileSizeMB}MB)..."
+        $latestVersion = $releaseInfo.tag_name
+        Write-Host "Downloading Chromium $($latestVersion) (Size: ${fileSizeMB}MB)..."
         
         # Download with progress tracking
         $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
-        Invoke-WebRequest -Uri $downloadUrl -OutFile $installerPath -UseBasicParsing
+        (New-Object System.Net.WebClient).DownloadFile($downloadUrl, $installerPath)
         $stopwatch.Stop()
         
         Write-Host "Download completed in $($stopwatch.Elapsed.Seconds) seconds"
@@ -52,6 +53,15 @@ try {
         Write-Host "Installing Chromium..."
         Start-Process -FilePath $installerPath -ArgumentList "--system-level --do-not-launch-chrome" -Wait -NoNewWindow
         
+        # Restoring default policies
+        $removeRegFileUrl = "https://raw.githubusercontent.com/bibicadotnet/chromium-debloat/main/remove-chromium-policy.reg"
+        $removeRegFilePath = "$downloadFolder\remove-chromium-policy.reg"
+
+        Write-Host "Restoring default Chromium policies..."
+        Invoke-WebRequest -Uri $removeRegFileUrl -OutFile $removeRegFilePath -UseBasicParsing
+
+        Start-Process "regedit.exe" -ArgumentList "/s `"$removeRegFilePath`"" -Wait -NoNewWindow
+
         # Download registry tweak
         $regFileUrl = "https://raw.githubusercontent.com/bibicadotnet/chromium-debloat/main/disable_chromium_features.reg"
         $regFilePath = "$downloadFolder\disable_chromium_features.reg"
@@ -60,7 +70,7 @@ try {
         Invoke-WebRequest -Uri $regFileUrl -OutFile $regFilePath -UseBasicParsing
         
         # Apply registry settings
-        Write-Host "Applying registry tweaks..."
+        Write-Host "Optimizing Chromium policies..."
         Start-Process "regedit.exe" -ArgumentList "/s `"$regFilePath`"" -Wait -NoNewWindow
         
         Write-Host "Chromium installation completed successfully!" -ForegroundColor Green

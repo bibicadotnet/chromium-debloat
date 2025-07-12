@@ -16,7 +16,13 @@ $ProgressPreference = 'SilentlyContinue'
 
 # Require Administrator privileges
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
+    if ([string]::IsNullOrEmpty($PSCommandPath)) {
+        # Nếu chạy từ web (irm | iex), tải lại script
+        Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -Command `"irm https://go.bibica.net/chromium | iex`"" -Verb RunAs
+    } else {
+        # Nếu chạy từ file local, sử dụng đường dẫn file
+        Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
+    }
     exit
 }
 

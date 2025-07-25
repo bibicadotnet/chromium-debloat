@@ -5,6 +5,10 @@ Run PowerShell, copy the code below into
 ```
 irm https://go.bibica.net/chromium | iex
 ```
+Or Chromium Nosync
+```
+irm https://go.bibica.net/chromium_nosync | iex
+```
 ```
 Checking for latest Chromium version...
 Downloading Chromium v138.0.7204.101-r1465706 (Size: 100.46MB)...

@@ -24,6 +24,10 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     exit
 }
 
+# Kill all processes
+Write-Host "Stopping Chromium processes..." -ForegroundColor Yellow
+Stop-Process -Name "chrome" -Force -ErrorAction SilentlyContinue
+
 # Configuration
 $downloadFolder = "$env:USERPROFILE\Downloads\ChromiumInstall"
 $installerPath = "$downloadFolder\mini_installer.sync.exe"

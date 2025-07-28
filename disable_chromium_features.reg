@@ -47,6 +47,9 @@ Windows Registry Editor Version 5.00
 ; Tắt thông báo ở mọi trang (hiển thị khi truy cập trang)
 "DefaultNotificationsSetting"=dword:00000002
 
+; Chặn các trang truy cập cảm biến chuyển động (motion sensors)
+"DefaultSensorsSetting"=dword:00000002  
+
 ; Bật Block third-party cookies
 "BlockThirdPartyCookies"=dword:00000001
 
@@ -76,3 +79,39 @@ Windows Registry Editor Version 5.00
 
 ; Không cho phép tự động điền bằng AI
 "AutofillPredictionSettings"=dword:00000002
+
+; Automatically switch to more secure connections with Automatic HTTPS
+"HttpsUpgradesEnabled"=dword:00000001
+
+; Do not allow Help Me Write
+"HelpMeWriteSettings"=dword:00000002
+
+; Do not allow AI Mode integrations.
+"AIModeSettings"=dword:00000001
+
+; The shopping list feature will not be available to users
+"ShoppingListEnabled"=dword:00000000
+
+; Disable receiving Safe Browsing surveys
+"SafeBrowsingSurveysEnabled"=dword:00000000
+
+; Disable Safe Browsing download deep scans
+"SafeBrowsingDeepScanningEnabled"=dword:00000000
+
+; Disable alternate error pages
+"AlternateErrorPagesEnabled"=dword:00000000
+
+; Disable the default browser check on startup
+"DefaultBrowserSettingEnabled"=dword:00000000
+
+; AIModeSearchSuggestSettings????
+"AIModeSearchSuggestSettings"=dword:00000000
+
+; Do not download model AI (GenAI)
+"GenAILocalFoundationalModelSettings"=dword:00000001
+
+; Tắt Tìm kiếm bên cạnh (Side Search)
+"SideSearchEnabled"=dword:00000000
+
+; Tắt Gửi phản hồi người dùng
+"UserFeedbackAllowed"=dword:00000000

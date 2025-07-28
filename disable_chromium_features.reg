@@ -2,6 +2,14 @@ Windows Registry Editor Version 5.00
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chromium]
 
+; Không dùng AI
+"GeminiSettings"=dword:00000001
+"GenAILocalFoundationalModelSettings"=dword:00000001
+"AutofillPredictionSettings"=dword:00000002
+"AIModeSearchSuggestSettings"=dword:00000000
+"HelpMeWriteSettings"=dword:00000002
+"AIModeSettings"=dword:00000001
+
 ; Tắt Make searches and browsing better
 "UrlKeyedAnonymizedDataCollectionEnabled"=dword:00000000
 
@@ -12,6 +20,7 @@ Windows Registry Editor Version 5.00
 "AutofillAddressEnabled"=dword:00000000
 "AutofillCreditCardEnabled"=dword:00000000
 "PasswordManagerEnabled"=dword:00000000
+"ImportAutofillFormData"=dword:00000000
 
 ; Tắt "Allow sites to check if you have payment methods saved"
 "PaymentMethodQueryEnabled"=dword:00000000
@@ -48,7 +57,7 @@ Windows Registry Editor Version 5.00
 "DefaultNotificationsSetting"=dword:00000002
 
 ; Chặn các trang truy cập cảm biến chuyển động (motion sensors)
-"DefaultSensorsSetting"=dword:00000002  
+"DefaultSensorsSetting"=dword:00000002
 
 ; Bật Block third-party cookies
 "BlockThirdPartyCookies"=dword:00000001
@@ -77,17 +86,8 @@ Windows Registry Editor Version 5.00
 ; Không cho phép các trang web liên quan xem hoạt động của bạn trong nhóm
 "RelatedWebsiteSetsEnabled"=dword:00000000
 
-; Không cho phép tự động điền bằng AI
-"AutofillPredictionSettings"=dword:00000002
-
 ; Automatically switch to more secure connections with Automatic HTTPS
 "HttpsUpgradesEnabled"=dword:00000001
-
-; Do not allow Help Me Write
-"HelpMeWriteSettings"=dword:00000002
-
-; Do not allow AI Mode integrations.
-"AIModeSettings"=dword:00000001
 
 ; The shopping list feature will not be available to users
 "ShoppingListEnabled"=dword:00000000
@@ -103,12 +103,6 @@ Windows Registry Editor Version 5.00
 
 ; Disable the default browser check on startup
 "DefaultBrowserSettingEnabled"=dword:00000000
-
-; AIModeSearchSuggestSettings????
-"AIModeSearchSuggestSettings"=dword:00000000
-
-; Do not download model AI (GenAI)
-"GenAILocalFoundationalModelSettings"=dword:00000001
 
 ; Tắt Tìm kiếm bên cạnh (Side Search)
 "SideSearchEnabled"=dword:00000000

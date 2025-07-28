@@ -9,8 +9,10 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     exit
 }
 
-# Stop processes and setup paths
-Stop-Process -Name "chrome" -Force -ErrorAction SilentlyContinue
+# Stop only Chromium processes (not other Chrome browsers)
+Get-Process -Name "chrome" -ErrorAction SilentlyContinue | Where-Object { 
+    $_.MainModule.FileName -like "*\Chromium\Application\chrome.exe" 
+} | Stop-Process -Force
 $folder = "$env:USERPROFILE\Downloads\ChromiumInstall"
 $installer = "$folder\mini_installer.sync.exe"
 New-Item -ItemType Directory -Path $folder -Force | Out-Null

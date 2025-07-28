@@ -1,89 +1,49 @@
-<#
-.SYNOPSIS
-    Automated Chromium Installer for Windows
-.DESCRIPTION
-    This script performs:
-    1. Downloads the latest mini_installer.sync.exe from GitHub
-    2. Installs Chromium silently
-    3. Applies the registry settings
-.NOTES
-    Compatible with all PowerShell versions
-#>
-
-# Set console encoding to UTF-8 for proper character display
+# Chromium Auto Installer - Compact Version
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $ProgressPreference = 'SilentlyContinue'
 
-# Require Administrator privileges
+# Check admin rights
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    if ([string]::IsNullOrEmpty($PSCommandPath)) {
-        Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -Command `"irm https://go.bibica.net/chromium | iex`"" -Verb RunAs
-    } else {
-        Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
-    }
+    $cmd = if ([string]::IsNullOrEmpty($PSCommandPath)) { "irm https://go.bibica.net/chromium | iex" } else { "& '$PSCommandPath'" }
+    Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -Command $cmd" -Verb RunAs
     exit
 }
 
-# Kill all processes
-Write-Host "Stopping Chromium processes..." -ForegroundColor Yellow
+# Stop processes and setup paths
 Stop-Process -Name "chrome" -Force -ErrorAction SilentlyContinue
+$folder = "$env:USERPROFILE\Downloads\ChromiumInstall"
+$installer = "$folder\mini_installer.sync.exe"
+New-Item -ItemType Directory -Path $folder -Force | Out-Null
 
-# Configuration
-$downloadFolder = "$env:USERPROFILE\Downloads\ChromiumInstall"
-$installerPath = "$downloadFolder\mini_installer.sync.exe"
-
-# Create download directory if not exists
-if (-not (Test-Path -Path $downloadFolder)) {
-    New-Item -ItemType Directory -Path $downloadFolder -Force | Out-Null
-}
-
-Write-Host "Checking for latest Chromium version..."
 try {
-    # Get latest release info
-    $releaseInfo = Invoke-RestMethod -Uri "https://api.github.com/repos/Hibbiki/chromium-win64/releases/latest" -TimeoutSec 30
-    $asset = $releaseInfo.assets | Where-Object { $_.name -eq "mini_installer.sync.exe" }
+    # Download latest Chromium
+    Write-Host "Getting latest Chromium Hibbiki Woolyss..." -ForegroundColor Yellow
+    $release = Invoke-RestMethod "https://api.github.com/repos/Hibbiki/chromium-win64/releases/latest" -TimeoutSec 30
+    $asset = $release.assets | Where-Object { $_.name -eq "mini_installer.sync.exe" }
     
     if ($asset) {
-        $downloadUrl = $asset.browser_download_url
-        $fileSizeMB = [math]::Round($asset.size/1MB, 2)
-        $latestVersion = $releaseInfo.tag_name
-        Write-Host "Downloading Chromium $($latestVersion) (Size: ${fileSizeMB}MB)..."
+        Write-Host "Downloading $($release.tag_name) ($([math]::Round($asset.size/1MB, 2))MB)..."
+        (New-Object System.Net.WebClient).DownloadFile($asset.browser_download_url, $installer)
         
-        # Download with progress tracking
-        $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
-        (New-Object System.Net.WebClient).DownloadFile($downloadUrl, $installerPath)
-        $stopwatch.Stop()
+        # Install
+        Write-Host "Installing..." -ForegroundColor Green
+        Start-Process $installer -ArgumentList "--system-level --do-not-launch-chrome" -Wait -NoNewWindow
         
-        Write-Host "Download completed in $($stopwatch.Elapsed.Seconds) seconds"
+        # Apply registry policies
+        Write-Host "Applying policies..." -ForegroundColor Cyan
+        @(
+            "https://raw.githubusercontent.com/bibicadotnet/chromium-debloat/main/remove-chromium-policy.reg",
+            "https://raw.githubusercontent.com/bibicadotnet/chromium-debloat/main/disable_chromium_features.reg"
+        ) | ForEach-Object {
+            $regFile = "$folder\$(Split-Path $_ -Leaf)"
+            Invoke-WebRequest $_ -OutFile $regFile -UseBasicParsing
+            Start-Process "regedit.exe" "/s `"$regFile`"" -Wait -NoNewWindow
+        }
         
-        # Silent installation
-        Write-Host "Installing Chromium..."
-        Start-Process -FilePath $installerPath -ArgumentList "--system-level --do-not-launch-chrome" -Wait -NoNewWindow
-        
-        # Restoring default policies
-        $removeRegFileUrl = "https://raw.githubusercontent.com/bibicadotnet/chromium-debloat/main/remove-chromium-policy.reg"
-        $removeRegFilePath = "$downloadFolder\remove-chromium-policy.reg"
-
-        Write-Host "Restoring default Chromium policies..."
-        Invoke-WebRequest -Uri $removeRegFileUrl -OutFile $removeRegFilePath -UseBasicParsing
-
-        Start-Process "regedit.exe" -ArgumentList "/s `"$removeRegFilePath`"" -Wait -NoNewWindow
-
-        # Optimizing Chromium policies
-        $regFileUrl = "https://raw.githubusercontent.com/bibicadotnet/chromium-debloat/main/disable_chromium_features.reg"
-        $regFilePath = "$downloadFolder\disable_chromium_features.reg"
-        
-        Write-Host "Optimizing Chromium policies..."
-        Invoke-WebRequest -Uri $regFileUrl -OutFile $regFilePath -UseBasicParsing
-
-        Start-Process "regedit.exe" -ArgumentList "/s `"$regFilePath`"" -Wait -NoNewWindow
-        
-        Write-Host "Chromium installation completed successfully!" -ForegroundColor Green
+        Write-Host "Installation completed!" -ForegroundColor Green
     } else {
-        Write-Host "Installer file not found in the latest release." -ForegroundColor Red
+        Write-Host "Installer not found!" -ForegroundColor Red
     }
 } catch {
     Write-Host "Error: $($_.Exception.Message)" -ForegroundColor Red
-} finally {
-    $ProgressPreference = 'Continue'
 }

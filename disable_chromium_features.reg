@@ -1,5 +1,7 @@
 Windows Registry Editor Version 5.00
 
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chromium]
+
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chromium]
 
 ; Không dùng AI
@@ -109,3 +111,4 @@ Windows Registry Editor Version 5.00
 
 ; Tắt Gửi phản hồi người dùng
 "UserFeedbackAllowed"=dword:00000000
+

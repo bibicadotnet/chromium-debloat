@@ -21,7 +21,7 @@ try {
     # Download latest Chromium
     Write-Host "Getting latest Chromium Hibbiki Woolyss..." -ForegroundColor Yellow
     $release = Invoke-RestMethod "https://api.github.com/repos/Hibbiki/chromium-win64/releases/latest" -TimeoutSec 30
-    $asset = $release.assets | Where-Object { $_.name -eq "mini_installer.sync.exe" }
+    $asset = $release.assets | Where-Object { $_.name -eq "mini_installer.exe" }
     
     if ($asset) {
         Write-Host "Downloading $($release.tag_name) ($([math]::Round($asset.size/1MB, 2))MB)..."
@@ -49,3 +49,4 @@ try {
 } catch {
     Write-Host "Error: $($_.Exception.Message)" -ForegroundColor Red
 }
+

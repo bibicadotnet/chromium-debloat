@@ -1,52 +1,39 @@
-# Chromium Auto Installer - Compact Version
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-$ProgressPreference = 'SilentlyContinue'
+# Chromium Auto Installer - Simple Version
 
 # Check admin rights
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    $cmd = if ([string]::IsNullOrEmpty($PSCommandPath)) { "irm https://go.bibica.net/chromium | iex" } else { "& '$PSCommandPath'" }
-    Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -Command $cmd" -Verb RunAs
+    Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -Command `"irm https://go.bibica.net/chromium | iex`"" -Verb RunAs
     exit
 }
 
-# Stop only Chromium processes (not other Chrome browsers)
-Get-Process -Name "chrome" -ErrorAction SilentlyContinue | Where-Object { 
-    $_.MainModule.FileName -like "*\Chromium\Application\chrome.exe" 
-} | Stop-Process -Force
-$folder = "$env:USERPROFILE\Downloads\ChromiumInstall"
-$installer = "$folder\mini_installer.sync.exe"
-New-Item -ItemType Directory -Path $folder -Force | Out-Null
+Clear-Host
+Write-Host " Chromium Browser verison Hibbiki Woolyss - Auto Installer " -BackgroundColor DarkGreen
 
-try {
-    # Download latest Chromium
-    Write-Host "Getting latest Chromium Hibbiki Woolyss..." -ForegroundColor Yellow
-    $release = Invoke-RestMethod "https://api.github.com/repos/Hibbiki/chromium-win64/releases/latest" -TimeoutSec 30
-    $asset = $release.assets | Where-Object { $_.name -eq "mini_installer.exe" }
-    
-    if ($asset) {
-        Write-Host "Downloading $($release.tag_name) ($([math]::Round($asset.size/1MB, 2))MB)..."
-        (New-Object System.Net.WebClient).DownloadFile($asset.browser_download_url, $installer)
-        
-        # Install
-        Write-Host "Installing..." -ForegroundColor Green
-        Start-Process $installer -ArgumentList "--system-level --do-not-launch-chrome" -Wait -NoNewWindow
-        
-        # Apply registry policies
-        Write-Host "Applying policies..." -ForegroundColor Cyan
-        @(
-            "https://raw.githubusercontent.com/bibicadotnet/chromium-debloat/main/remove-chromium-policy.reg",
-            "https://raw.githubusercontent.com/bibicadotnet/chromium-debloat/main/disable_chromium_features.reg"
-        ) | ForEach-Object {
-            $regFile = "$folder\$(Split-Path $_ -Leaf)"
-            Invoke-WebRequest $_ -OutFile $regFile -UseBasicParsing
-            Start-Process "regedit.exe" "/s `"$regFile`"" -Wait -NoNewWindow
-        }
-        
-        Write-Host "Installation completed!" -ForegroundColor Green
-    } else {
-        Write-Host "Installer not found!" -ForegroundColor Red
-    }
-} catch {
-    Write-Host "Error: $($_.Exception.Message)" -ForegroundColor Red
-}
+# Stop Chromium processes
+Stop-Process -Name "chrome" -Force -ErrorAction SilentlyContinue
 
+# Get latest release info
+Write-Host "Getting latest Chromium..." -ForegroundColor Yellow
+$release = Invoke-RestMethod "https://api.github.com/repos/Hibbiki/chromium-win64/releases/latest"
+$asset = $release.assets | Where-Object { $_.name -eq "mini_installer.exe" }
+
+# Download installer
+Write-Host "Downloading $($release.tag_name)..." -ForegroundColor Yellow
+(New-Object System.Net.WebClient).DownloadFile($asset.browser_download_url, "$env:TEMP\chromium_installer.exe")
+
+# Install Chromium
+Write-Host "Installing..." -ForegroundColor Green
+Start-Process "$env:TEMP\chromium_installer.exe" -ArgumentList "--system-level --do-not-launch-chrome" -Wait
+
+# Apply registry policy
+Write-Host "Applying optimizations..." -ForegroundColor Cyan
+(New-Object System.Net.WebClient).DownloadFile("https://raw.githubusercontent.com/bibicadotnet/chromium-debloat/main/disable_chromium_features.reg", "$env:TEMP\optimize.reg")
+Start-Process "regedit.exe" -ArgumentList "/s `"$env:TEMP\optimize.reg`"" -Wait -NoNewWindow
+
+# Clean up
+$version = $release.tag_name -replace "v|-.+"
+Remove-Item "$env:TEMP\chromium_installer.exe", "$env:TEMP\optimize.reg" -Force -ErrorAction SilentlyContinue
+Remove-Item "${env:ProgramFiles}\Chromium\Application\$version\Installer" -Recurse -Force -ErrorAction SilentlyContinue
+
+Write-Host "Chromium Browser verison Hibbiki Woolyss installation completed!" -ForegroundColor Green
+Write-Host

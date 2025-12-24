@@ -1,11 +1,5 @@
 # Chromium Auto Installer - Simple Version
 
-# Check admin rights
-if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -Command `"irm https://go.bibica.net/chromium | iex`"" -Verb RunAs
-    exit
-}
-
 Clear-Host
 Write-Host " Chromium Browser version Hibbiki Woolyss - Auto Installer " -BackgroundColor DarkGreen
 
